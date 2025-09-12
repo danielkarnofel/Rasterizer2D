@@ -1,3 +1,7 @@
+// Imports
 
-canvas.width = 800;
-canvas.height = 600;
+const canvas = document.querySelector("#canvas");
+
+const vsSource = ``;
+const fsSource = ``;
+

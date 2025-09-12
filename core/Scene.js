@@ -1,0 +1,31 @@
+import Node from './Node.js';
+
+export default class Scene {
+
+    constructor() {
+        this.clearColor = [0.15, 0.15, 0.15, 1.0];
+        this.root = new Node();
+    }
+
+    add(node) {
+        this.root.addChild(node);
+    }
+
+    remove(node) {
+        this.root.removeChild(node);
+    }
+
+    update() {
+        this.root.update();
+    }
+
+    flatten(node = this.root, list = []) {
+        if (!(node.isDrawable)) {
+            list.push(node);
+        }
+        for (const child of node.children) {
+            flatten(child, list);
+        }
+        return list;
+    }
+}
