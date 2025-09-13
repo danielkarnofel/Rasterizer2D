@@ -4,6 +4,7 @@ export default class Matrix3 {
 
     constructor() {
         this.elements = new Float32Array(9);
+        this.makeIdentity();
     }
 
     clone() {

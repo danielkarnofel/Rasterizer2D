@@ -1,6 +1,6 @@
 
 body {
-    background-color: #222;
+    background-color: #111;
     color: #DDD;
     display: flex;
     flex-direction: column;
@@ -10,6 +10,5 @@ body {
 
 canvas {
     border: 1px solid red;
-    padding: 5rem;
     background-color: #000;
 }

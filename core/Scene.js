@@ -7,8 +7,10 @@ export default class Scene {
         this.root = new Node();
     }
 
-    add(node) {
-        this.root.addChild(node);
+    add(nodes) {
+        for (const node of nodes) {
+            this.root.addChild(node);
+        }
     }
 
     remove(node) {
@@ -20,11 +22,11 @@ export default class Scene {
     }
 
     flatten(node = this.root, list = []) {
-        if (!(node.isDrawable)) {
+        if (node.isDrawable) {
             list.push(node);
         }
         for (const child of node.children) {
-            flatten(child, list);
+            this.flatten(child, list);
         }
         return list;
     }

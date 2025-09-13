@@ -2,7 +2,7 @@ import Matrix3 from '../math/Matrix3.js';
 
 export default class Node {
 
-    constructor(geometry, color = new Color(), texture = null) {
+    constructor(geometry = null, color = [1.0, 1.0, 1.0, 1.0], texture = null) {
 
         // Scene graph
         this.parent = null;
