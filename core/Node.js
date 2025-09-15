@@ -44,7 +44,7 @@ export default class Node {
             .multiplyMatrix(translation)
             .multiplyMatrix(rotation)
             .multiplyMatrix(scale);
-            
+
         for (const child of this.children) {
             child.update();
         }

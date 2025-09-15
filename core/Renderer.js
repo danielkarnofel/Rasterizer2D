@@ -31,11 +31,8 @@ const fragmentShaderSource = `#version 300 es
     out vec4 outColor;
 
     void main() {
-        if (u_useTexture) {
-            outColor = texture(u_texture, v_tex);
-        } else {
-            outColor = u_color;
-        }
+        vec4 base = u_useTexture ? texture(u_texture, v_tex) : vec4(1.0);
+        outColor = base * u_color;
     }
 `;
 
@@ -83,6 +80,7 @@ export default class Renderer {
         this.gl.viewport(0, 0, canvas.width, canvas.height);
         this.projectionMatrix = new Matrix3().makeProjection(0, canvas.width, canvas.height, 0);
         this.vaoCache = {};
+        this.texCache = new Map();
         this.defaultShader = new Shader(
             this.gl,
             vertexShaderSource,
@@ -90,6 +88,9 @@ export default class Renderer {
             ["a_pos", "a_tex"],
             ["u_mp", "u_color", "u_texture", "u_useTexture"]
         );
+
+        this.gl.enable(this.gl.BLEND);
+        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
     }
 
     resize() {
@@ -104,8 +105,9 @@ export default class Renderer {
 
     updateAndRender(scene) {
         this.clear(scene.clearColor);
-        const drawList = scene.flatten();
         scene.update();
+        const drawList = scene.flatten();
+        drawList.sort((a, b) => a.zIndex - b.zIndex);
         for (const node of drawList) {
             this.drawNode(node);
         }
@@ -144,23 +146,31 @@ export default class Renderer {
         return vao;
     }
 
-    setTexture(node) {
+    getTexture(source) {
+        if (this.texCache.has(source)) return this.texCache.get(source);
+        const texture = this.createTexture(source);
+        this.texCache.set(source, texture);
+        return texture;
+    }
+
+    createTexture(source) {
         const gl = this.gl;
-        if (!node.texture) {
-            gl.bindTexture(gl.TEXTURE_2D, null);
-            return;
-        }
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         const texture = gl.createTexture();
-        gl.activeTexture(gl.TEXTURE0 + 0);
         gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, node.texture);
+
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        
+
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        return texture;
     }
 
     drawNode(node) {
@@ -175,7 +185,13 @@ export default class Renderer {
 
         gl.useProgram(this.defaultShader.program);
         gl.bindVertexArray(this.getVAO(node.geometry));
-        this.setTexture(node);
+        
+        gl.activeTexture(gl.TEXTURE0 + 0);
+        if (!node.texture) {
+            gl.bindTexture(gl.TEXTURE_2D, null);
+        } else {
+            gl.bindTexture(gl.TEXTURE_2D, this.getTexture(node.texture));
+        }
 
         const mpMatrix = this.projectionMatrix.clone().multiplyMatrix(node.modelMatrix);
         gl.uniformMatrix3fv(shader.uniforms.u_mp, false, mpMatrix.elements);
