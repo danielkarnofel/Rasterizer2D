@@ -78,7 +78,7 @@ export default class Renderer {
         this.canvas = canvas;
         this.gl = getWebGL2Context(canvas);
         this.gl.viewport(0, 0, canvas.width, canvas.height);
-        this.projectionMatrix = new Matrix3().makeProjection(0, canvas.width, canvas.height, 0);
+        this.projectionMatrix = new Matrix3().makeOrthographic(0, canvas.width, canvas.height, 0);
         this.vaoCache = {};
         this.texCache = new Map();
         this.defaultShader = new Shader(
@@ -95,7 +95,7 @@ export default class Renderer {
 
     resize() {
         this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-        this.projectionMatrix.makeProjection(0, this.canvas.width, this.canvas.height, 0);
+        this.projectionMatrix.makeOrthographic(0, this.canvas.width, this.canvas.height, 0);
     }
 
     clear(c = [0.15, 0.15, 0.15, 1.0]) {
