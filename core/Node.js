@@ -2,7 +2,7 @@ import Matrix3 from '../math/Matrix3.js';
 
 export default class Node {
 
-    constructor(geometry = null, color = [1.0, 1.0, 1.0, 1.0], texture = null) {
+    constructor(geometry = null, texture = null) {
 
         // Scene graph
         this.parent = null;
@@ -11,8 +11,8 @@ export default class Node {
         this.isDrawable = geometry ? true : false;
 
         // Transformation
-        this.w = 1;
-        this.h = 1;
+        this.w = 1.0;
+        this.h = 1.0;
         this.x = 0;
         this.y = 0;
         this.r = 0;
@@ -20,7 +20,9 @@ export default class Node {
 
         // Appearance
         this.geometry = geometry;
-        this.color = color
+        this.fill = [1.0, 1.0, 1.0, 1.0];
+        this.stroke = [1.0, 1.0, 1.0, 1.0];
+        this.strokeWidth = 2;
         this.texture = texture;
     }
 
