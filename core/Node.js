@@ -11,8 +11,8 @@ export default class Node {
         this.isDrawable = geometry ? true : false;
 
         // Transformation
-        this.w = 1.0;
-        this.h = 1.0;
+        this.w = geometry ? 100.0 : 1.0;
+        this.h = geometry ? 100.0 : 1.0;
         this.x = 0;
         this.y = 0;
         this.r = 0;
@@ -21,8 +21,8 @@ export default class Node {
         // Appearance
         this.geometry = geometry;
         this.fill = [1.0, 1.0, 1.0, 1.0];
-        this.stroke = [1.0, 1.0, 1.0, 1.0];
-        this.strokeWidth = 2;
+        this.stroke = [0.0, 0.0, 0.0, 1.0];
+        this.strokeWidth = 0;
         this.texture = texture;
     }
 
@@ -34,6 +34,31 @@ export default class Node {
     removeChild(node) {
         this.children = this.children.filter(c => c !== node);
         node.parent = null;
+    }
+
+    addChildren(nodes) {
+        for (const node of nodes) {
+            this.addChild(node);
+        }
+    }
+
+    removeChildren(nodes) {
+        for (const node of nodes) {
+            this.removeChild(node);
+        }
+    }
+
+    getAABB() {
+        const aabb = new Node('rectangle');
+        aabb.fill = [1.0, 1.0, 1.0, 0.0];
+        aabb.stroke = [1.0, 1.0, 1.0, 1.0];
+        aabb.strokeWidth = 1.0;
+        aabb.w = this.w;
+        aabb.h - this.h;
+        aabb.x = this.x;
+        aabb.y = this.y;
+        aabb.r = this.r;
+        return aabb;
     }
 
     update() {
