@@ -54,7 +54,7 @@ export default class Node {
         aabb.stroke = [1.0, 1.0, 1.0, 1.0];
         aabb.strokeWidth = 1.0;
         aabb.w = this.w;
-        aabb.h - this.h;
+        aabb.h = this.h;
         aabb.x = this.x;
         aabb.y = this.y;
         aabb.r = this.r;
