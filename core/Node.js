@@ -48,19 +48,6 @@ export default class Node {
         }
     }
 
-    getAABB() {
-        const aabb = new Node('rectangle');
-        aabb.fill = [1.0, 1.0, 1.0, 0.0];
-        aabb.stroke = [1.0, 1.0, 1.0, 1.0];
-        aabb.strokeWidth = 1.0;
-        aabb.w = this.w;
-        aabb.h = this.h;
-        aabb.x = this.x;
-        aabb.y = this.y;
-        aabb.r = this.r;
-        return aabb;
-    }
-
     update() {
         const translation = new Matrix3().makeTranslation(this.x, this.y);
         const rotation = new Matrix3().makeRotation(this.r);

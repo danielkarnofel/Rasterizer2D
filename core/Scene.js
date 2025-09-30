@@ -3,7 +3,7 @@ import Node from './Node.js';
 export default class Scene {
 
     constructor() {
-        this.clearColor = [0.15, 0.15, 0.15, 1.0];
+        this.clearColor = [0.2, 0.2, 0.2, 1.0];
         this.root = new Node();
     }
 
