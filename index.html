@@ -1,14 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rasterizer2D</title>
-    <link href="style.css" rel="stylesheet">
+    <link href="style/main.css" rel="stylesheet">
     <script type="module" src="app.js" defer></script>
 </head>
+
 <body>
-    <h1>Dan's 2D Rasterizer Project</h1>
-    <canvas id="canvas"></canvas>
+    <header>
+        <h1>Renderer2D</h1>
+    </header>
+    <main>
+
+        <section class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </section>
+
+        <section class="ui-container">
+
+            <div class="tab-container">
+                <button class="tab-button active" data-tab="scene">Scene</button>
+                <button class="tab-button" data-tab="properties">Properties</button>
+            </div>
+
+            <!-- Scene Tab -->
+            <!------------------------------------------------------------------------------------>
+            <div class="tab-content active" id="scene">
+
+                <div class="ui-section">
+                    <span>
+                        <input type="color" id="canvas-fill" value="#111111">
+                        <label for="canvas-fill">Background</label>
+                    </span>
+                    <span>
+                        <input type="range" id="canvas-opacity" value="1" min="0" max="1" step="0.01">
+                        <label for="canvas-opacity">Opacity</label>
+                    </span>
+                    <span>
+                        <input type="number" id="canvas-width" value="800" min="100">
+                        <label for="canvas-width">Width</label>
+                    </span>
+                    <span>
+                        <input type="number" id="canvas-height" value="800" min="100">
+                        <label for="canvas-height">Height</label>
+                    </span>
+                </div>
+
+                <div class="ui-section">
+                    <span>
+                        <button id="add-node">Add Node</button>
+                        <select id="geometry-select">
+                            <option value="rectangle">Rectangle</option>
+                            <option value="ellipse">Ellipse</option>
+                            <option value="triangle">Triangle</option>
+                        </select>
+                    </span>
+                </div>
+
+                <div class="ui-section">
+                    <ul class="node-list">
+                        <li class="node-item selected">Rectangle 1</li>
+                        <li class="node-item">Ellipse 1</li>
+                        <li class="node-item">Triangle 1</li>
+                        <li class="node-item">Rectangle 2</li>
+                    </ul>
+                </div>
+
+            </div>
+            <!------------------------------------------------------------------------------------>
+
+
+
+            <!-- Properties Tab -->
+            <!------------------------------------------------------------------------------------>
+            <div class="tab-content" id="properties">
+
+                <div class="ui-section">
+                    <span>
+                        <input type="color" id="fill-color" value="#ff0000">
+                        <label for="fill-color">Fill Color</label>
+                    </span>
+                    <span>
+                        <input type="range" id="fill-opacity" value="1" min="0" max="1" step="0.01">
+                        <label for="fill-opacity">Opacity</label>
+                    </span>
+                </div>
+
+                <div class="ui-section">
+                    <span>
+                        <input type="color" id="stroke-color" value="#000000">
+                        <label for="stroke-color">Stroke Color</label>
+                    </span>
+                    <span>
+                        <input type="range" id="stroke-opacity" value="1" min="0" max="1" step="0.01">
+                        <label for="stroke-opacity">Opacity</label>
+                    </span>
+                    <span>
+                        <input type="number" id="stroke-width" value="1" min="0">
+                        <label for="stroke-width">Stroke Width</label>
+                    </span>
+                </div>
+
+                <div class="ui-section">
+                    <span>
+                        <input type="number" id="position-x" value="0">
+                        <input type="number" id="position-y" value="0">
+                        <label for="position">Position (x, y)</label>
+                    </span>
+                    <span>
+                        <input type="number" id="scale-w" value="0">
+                        <input type="number" id="scale-h" value="0">
+                        <label for="scale">Scale (w, h)</label>
+                    </span>
+                    <span>
+                        <input type="number" id="rotation" value="0">
+                        <label for="rotation">Rotation (degrees)</label>
+                    </span>
+                </div>
+
+            </div>
+            <!------------------------------------------------------------------------------------>
+
+        </section>
+    </main>
+    <footer>
+        <p>Daniel Karnofel</p>
+    </footer>
 </body>
+
 </html>
