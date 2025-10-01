@@ -2,7 +2,7 @@
 import Renderer from './core/Renderer.js';
 import Scene from './core/Scene.js';
 import Node from './core/Node.js';
-
+import { rgbToHex, hexToRgb } from './utils/color.js';
 import { mouseToCanvas, pick } from './utils/pointer.js';
 
 const canvas = document.querySelector("#canvas");
@@ -41,9 +41,10 @@ circ1.h = 250;
 scene.add([rect1, rect2, rect3, rect4, circ1]);
 renderer.updateAndRender(scene);
 
-// UI
+
 
 // Tab functionality
+//===========================================================================================
 document.querySelectorAll(".tab-button").forEach(button => {
 	button.addEventListener("click", () => {
 
@@ -56,15 +57,17 @@ document.querySelectorAll(".tab-button").forEach(button => {
 		document.querySelector(`#${tabId}`).classList.add("active");
 	});
 });
+//===========================================================================================
+
+// Scene UI
+//===========================================================================================
 
 // Canvas fill color
 const canvasFillInput = document.querySelector("#canvas-fill");
 canvasFillInput.addEventListener("input", () => {
 	const hex = canvasFillInput.value;
-	const r = parseInt(hex.slice(1, 3), 16) / 255;
-	const g = parseInt(hex.slice(3, 5), 16) / 255;
-	const b = parseInt(hex.slice(5, 7), 16) / 255;
-	scene.clearColor = [r, g, b, 1.0];
+	const rgb = hexToRgb(hex);
+	scene.clearColor = [rgb[0], rgb[1], rgb[2], 1.0];
 	renderer.updateAndRender(scene);
 });
 
@@ -159,7 +162,10 @@ function setSelected(node) {
 }
 
 function getOBB(node) {
-	const obb = new Node('rectangle');
+	if (!selectionBox) {
+		selectionBox = new Node('rectangle');
+	}
+	const obb = selectionBox;
 	obb.fill = [1.0, 1.0, 1.0, 0.0];
 	obb.stroke = [1.0, 1.0, 1.0, 1.0];
 	obb.strokeWidth = 1.0;
@@ -192,6 +198,107 @@ function setSelectionUI(node) {
 	}
 }
 
+//===========================================================================================
+
+// Properties UI
+//===========================================================================================
+
+const nodeFillColor = document.querySelector("#fill-color");
+nodeFillColor.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const rgb = hexToRgb(nodeFillColor.value);
+	selectedNode.fill = [rgb[0], rgb[1], rgb[2], selectedNode.fill[3]];
+	renderer.updateAndRender(scene);
+});
+
+const nodeFillOpacity = document.querySelector("#fill-opacity");
+nodeFillOpacity.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const opacity = Math.max(parseFloat(nodeFillOpacity.value), 0.0);
+	selectedNode.fill[3] = opacity;
+	renderer.updateAndRender(scene);
+});
+
+const nodeStrokeColor = document.querySelector("#stroke-color");
+nodeStrokeColor.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const rgb = hexToRgb(nodeStrokeColor.value);
+	selectedNode.stroke = [rgb[0], rgb[1], rgb[2], selectedNode.stroke[3]];
+	renderer.updateAndRender(scene);
+});
+
+const nodeStrokeOpacity = document.querySelector("#stroke-opacity");
+nodeStrokeOpacity.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const opacity = Math.max(parseFloat(nodeStrokeOpacity.value), 0.0);
+	selectedNode.stroke[3] = opacity;
+	renderer.updateAndRender(scene);
+});
+
+const nodeStrokeWidth = document.querySelector("#stroke-width");
+nodeStrokeWidth.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const width = Math.max(parseFloat(nodeStrokeWidth.value), 0.0);
+	selectedNode.strokeWidth = width;
+	renderer.updateAndRender(scene);
+});
+
+const nodeXPosition = document.querySelector("#position-x");
+nodeXPosition.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const x = parseFloat(nodeXPosition.value);
+	selectedNode.x = x;
+	selectionBox = getOBB(selectedNode);
+	renderer.updateAndRender(scene);
+});
+
+const nodeYPosition = document.querySelector("#position-y");
+nodeYPosition.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const y = parseFloat(nodeYPosition.value);
+	selectedNode.y = y;
+	selectionBox = getOBB(selectedNode);
+	renderer.updateAndRender(scene);
+});
+
+const nodeWScale = document.querySelector("#scale-w");
+nodeWScale.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const w = Math.max(parseFloat(nodeWScale.value), 1.0);
+	selectedNode.w = w;
+	selectionBox = getOBB(selectedNode);
+	renderer.updateAndRender(scene);
+});
+
+const nodeHScale = document.querySelector("#scale-h");
+nodeHScale.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const h = Math.max(parseFloat(nodeHScale.value), 1.0);
+	selectedNode.h = h;
+	selectionBox = getOBB(selectedNode);
+	renderer.updateAndRender(scene);
+});
+
+const nodeRotation = document.querySelector("#rotation");
+nodeRotation.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const r = parseFloat(nodeRotation.value);
+	selectedNode.r = r;
+	selectionBox = getOBB(selectedNode);
+	renderer.updateAndRender(scene);
+});
+
 function updatePropertiesPanel(node) {
-	// TODO
+	nodeFillColor.value = node ? rgbToHex(node.fill[0], node.fill[1], node.fill[2]) : '#ffffff';
+	nodeFillOpacity.value = node ? node.fill[3] : 1.0;
+	nodeStrokeColor.value = node ? rgbToHex(node.stroke[0], node.stroke[1], node.stroke[2]) : '#000000';
+	nodeStrokeOpacity.value = node ? node.stroke[3] : 1.0;
+	nodeStrokeWidth.value = node ? node.strokeWidth : 1.0;
+	nodeXPosition.value = node ? node.x : 0;
+	nodeYPosition.value = node ? node.y : 0;
+	nodeWScale.value = node ? node.w : 100;
+	nodeHScale.value = node ? node.h : 100;
+	nodeRotation.value = node ? node.r : 0;
 }
+
+//===========================================================================================
