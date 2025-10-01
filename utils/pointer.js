@@ -1,10 +1,11 @@
 import Vector3 from '../math/Vector3.js';
 
-export function pick(scene, point) {
+export function pick(scene, point, selectionBox = null) {
     const list = scene.flatten();
     list.sort((a, b) => a.zIndex - b.zIndex);
     for (let i = list.length - 1; i >= 0; i--) {
         const node = list[i];
+        if (node === selectionBox) continue;
         if (hit(node, point)) {
             return node;
         }
