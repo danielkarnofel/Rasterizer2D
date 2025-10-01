@@ -3,15 +3,24 @@
 .canvas-container {
   border: 1px solid #333;
   flex: 1;
+  display: block;
+  overflow: auto;
+}
+
+.canvas-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: scroll;
+  width: fit-content;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 1rem;
 }
 
 #canvas {
   border: 1px solid #333;
   background-color: transparent;
+  display: block;
 }
 
 /* UI */
