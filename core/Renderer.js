@@ -146,7 +146,10 @@ export default class Renderer {
         );
 
         this.gl.enable(this.gl.BLEND);
-        this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+        this.gl.blendFuncSeparate(
+            this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA,  // RGB blend
+            this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA         // A blend
+        );
     }
 
     resize() {
@@ -154,7 +157,7 @@ export default class Renderer {
         this.projectionMatrix.makeOrthographic(0, this.canvas.width, this.canvas.height, 0);
     }
 
-    clear(c = [0.15, 0.15, 0.15, 1.0]) {
+    clear(c = [0.15, 0.15, 0.15, 0.0]) {
         this.gl.clearColor(c[0], c[1], c[2], c[3]);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     }
@@ -238,7 +241,7 @@ export default class Renderer {
     pixelsPerLocalUnit(node) {
 
         const mp = this.projectionMatrix.clone().multiplyMatrix(node.modelMatrix);
-        
+
         const clipSpaceOrigin = mp.multiplyVector(new Vector3(0, 0, 1));
         const pixelOrigin = this.ndcToPixel(clipSpaceOrigin); // Isn't this just (canvas.width/2, canvas.height/2) ?
 
@@ -308,7 +311,7 @@ export default class Renderer {
 }
 
 function getWebGL2Context(canvas) {
-    const gl = canvas.getContext("webgl2");
+    const gl = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
     if (!gl) throw new Error("Failed to get WebGL2 context.");
     return gl;
 }

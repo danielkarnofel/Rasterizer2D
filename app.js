@@ -68,6 +68,7 @@ document.querySelectorAll(".tab-button").forEach(button => {
 
 // Canvas fill color
 const canvasFillInput = document.querySelector("#canvas-fill");
+canvasFillInput.value = rgbToHex(scene.clearColor[0], scene.clearColor[2], scene.clearColor[2])
 canvasFillInput.addEventListener("input", () => {
 	const hex = canvasFillInput.value;
 	const rgb = hexToRgb(hex);
@@ -77,8 +78,9 @@ canvasFillInput.addEventListener("input", () => {
 
 // Canvas opacity
 const canvasOpacityInput = document.querySelector("#canvas-opacity");
+canvasOpacityInput.value = scene.clearColor[3];
 canvasOpacityInput.addEventListener("input", () => {
-	const opacity = Math.max(parseFloat(canvasOpacityInput.value), 100);
+	const opacity = canvasOpacityInput.value;
 	scene.clearColor[3] = opacity;
 	renderer.updateAndRender(scene);
 });
