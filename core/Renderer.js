@@ -271,7 +271,7 @@ export default class Renderer {
         if (!node.texture) {
             gl.bindTexture(gl.TEXTURE_2D, null);
         } else {
-            gl.bindTexture(gl.TEXTURE_2D, this.getTexture(node.texture));
+            gl.bindTexture(gl.TEXTURE_2D, this.getTexture(node.texture.img));
         }
 
         const mpMatrix = this.projectionMatrix.clone().multiplyMatrix(node.modelMatrix);

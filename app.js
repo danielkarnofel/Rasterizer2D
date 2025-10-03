@@ -13,6 +13,8 @@ const renderer = new Renderer(canvas);
 const scene = new Scene();
 
 // Create test scene
+//===========================================================================================
+
 const rect1 = new Node('rectangle');
 rect1.fill = [1.0, 0.0, 0.0, 1.0];
 rect1.x = -100;
@@ -33,15 +35,17 @@ rect4.fill = [1.0, 0.0, 0.0, 1.0];
 rect4.x = 100;
 rect4.y = 100;
 
+const rect5 = new Node('rectangle');
+rect5.fill = [1.0, 1.0, 1.0, 1.0];
+
 const circ1 = new Node('ellipse');
 circ1.fill = [0.0, 0.0, 1.0, 0.5];
 circ1.w = 250;
 circ1.h = 250;
 
-scene.add([rect1, rect2, rect3, rect4, circ1]);
+scene.add([rect1, rect2, rect3, rect4, circ1, rect5]);
 renderer.updateAndRender(scene);
-
-
+//===========================================================================================
 
 // Tab functionality
 //===========================================================================================
@@ -108,9 +112,6 @@ addNodeButton.addEventListener("click", () => {
 	renderer.updateAndRender(scene);
 });
 
-// Remove node
-// TODO
-
 // Node selection
 let selectedNode = null;
 let selectionBox = null;
@@ -121,11 +122,43 @@ function updateNodeList() {
 	nodeList.innerHTML = '';
 	const nodes = scene.flatten();
 	nodes.forEach((node, index) => {
+
 		const li = document.createElement("li");
 		li.className = "node-item";
 		li.dataset.index = index;
 		li.textContent = node.geometry;
 		if (node === selectedNode) li.classList.add("selected");
+
+		// Node control buttons
+		const buttonContainer = document.createElement("div");
+		buttonContainer.className = "button-container";
+		li.appendChild(buttonContainer);
+
+		const hideButton = document.createElement("button");
+		hideButton.className = "node-button";
+		hideButton.textContent = "◐";
+		hideButton.title = "Visibility";
+		buttonContainer.appendChild(hideButton);
+		hideButton.addEventListener("click", (e) => {
+			e.stopPropagation();
+			node.isDrawable = node.isDrawable ? false : true;
+			renderer.updateAndRender(scene);
+		});
+
+		const deleteButton = document.createElement("button");
+		deleteButton.className = "node-button";
+		deleteButton.textContent = "✕";
+		deleteButton.title = "Delete node";
+		buttonContainer.appendChild(deleteButton);
+		deleteButton.addEventListener("click", (e) => {
+			e.stopPropagation();
+			scene.remove(node);
+			if (node === selectedNode) {
+				setSelected(null);
+			}
+			updateNodeList();
+			renderer.updateAndRender(scene);
+		});
 
 		// Set selected node by clicking on list item
 		li.addEventListener("click", () => {
@@ -174,6 +207,7 @@ function getOBB(node) {
 	obb.x = node.x;
 	obb.y = node.y;
 	obb.r = node.r;
+	obb.zIndex = Infinity;
 	return obb;
 }
 
@@ -288,9 +322,19 @@ nodeRotation.addEventListener("input", () => {
 	renderer.updateAndRender(scene);
 });
 
+const nodeZIndex = document.querySelector("#z-index");
+nodeZIndex.addEventListener("input", () => {
+	if (!selectedNode) return;
+	const z = parseInt(nodeZIndex.value);
+	selectedNode.zIndex = z;
+	selectionBox = getOBB(selectedNode);
+	renderer.updateAndRender(scene);
+});
+
 function updatePropertiesPanel(node) {
 	nodeFillColor.value = node ? rgbToHex(node.fill[0], node.fill[1], node.fill[2]) : '#ffffff';
 	nodeFillOpacity.value = node ? node.fill[3] : 1.0;
+	nodeTextureSelect.value = (node && node.texture) ? node.texture.id : "";
 	nodeStrokeColor.value = node ? rgbToHex(node.stroke[0], node.stroke[1], node.stroke[2]) : '#000000';
 	nodeStrokeOpacity.value = node ? node.stroke[3] : 1.0;
 	nodeStrokeWidth.value = node ? node.strokeWidth : 1.0;
@@ -299,6 +343,48 @@ function updatePropertiesPanel(node) {
 	nodeWScale.value = node ? node.w : 100;
 	nodeHScale.value = node ? node.h : 100;
 	nodeRotation.value = node ? node.r : 0;
+	nodeZIndex.value = node ? node.zIndex : 0;
 }
 
 //===========================================================================================
+
+// Texture management
+const textureList = {};
+const nodeTextureSelect = document.querySelector("#texture-select");
+
+function updateTextureList() {
+	nodeTextureSelect.innerHTML = '<option value="">None</option>';
+	for (const id in textureList) {
+		const option = document.createElement("option");
+		option.value = id;
+		const urlParts = textureList[id].img.src.split("/");
+		option.textContent = urlParts[urlParts.length-1];
+		nodeTextureSelect.appendChild(option);
+	}
+}
+
+// Preloaded textures
+const dogTexture = {id: 1, img: new Image()};
+dogTexture.img.src = '/assets/dog.png';
+dogTexture.img.onload = () => {
+	textureList[dogTexture.id] = dogTexture;
+	updateTextureList();
+}
+const catTexture = {id: 2, img: new Image()};
+catTexture.img.src = '/assets/cat.png';
+catTexture.img.onload = () => {
+	textureList[catTexture.id] = catTexture;
+	updateTextureList();
+}
+
+nodeTextureSelect.addEventListener('change', () => {
+	if (!selectedNode) return;
+	const id = nodeTextureSelect.value;
+	if (id === "") { 
+		selectedNode.texture = null; 
+	} else { 
+		selectedNode.texture = textureList[id];
+	}
+	renderer.updateAndRender(scene);
+});
+
