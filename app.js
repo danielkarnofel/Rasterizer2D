@@ -4,46 +4,17 @@ import Scene from './core/Scene.js';
 import Node from './core/Node.js';
 import { rgbToHex, hexToRgb } from './utils/color.js';
 import { mouseToCanvas, pick } from './utils/pointer.js';
+import { createTestScene1, createTestScene2 } from './scenes/testScenes.js';
 
 const canvas = document.querySelector("#canvas");
 canvas.width = 600;
 canvas.height = 600;
 
 const renderer = new Renderer(canvas);
-const scene = new Scene();
 
 // Create test scene
 //===========================================================================================
-
-const rect1 = new Node('rectangle');
-rect1.fill = [1.0, 0.0, 0.0, 1.0];
-rect1.x = -100;
-rect1.y = -100;
-
-const rect2 = new Node('rectangle');
-rect2.fill = [0.0, 1.0, 0.0, 1.0];
-rect2.x = -100;
-rect2.y = 100;
-
-const rect3 = new Node('rectangle');
-rect3.fill = [0.0, 1.0, 0.0, 1.0];
-rect3.x = 100;
-rect3.y = -100;
-
-const rect4 = new Node('rectangle');
-rect4.fill = [1.0, 0.0, 0.0, 1.0];
-rect4.x = 100;
-rect4.y = 100;
-
-const rect5 = new Node('rectangle');
-rect5.fill = [1.0, 1.0, 1.0, 1.0];
-
-const circ1 = new Node('ellipse');
-circ1.fill = [0.0, 0.0, 1.0, 0.5];
-circ1.w = 250;
-circ1.h = 250;
-
-scene.add([rect1, rect2, rect3, rect4, circ1, rect5]);
+let scene = createTestScene2();
 renderer.updateAndRender(scene);
 //===========================================================================================
 

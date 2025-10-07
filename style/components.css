@@ -31,6 +31,7 @@
   display: flex;
   flex-direction: column;
   max-width: 300px;
+  min-height: 0;
   flex-wrap: nowrap;
   overflow-x: hidden;
 }
@@ -54,13 +55,22 @@
 }
 
 .tab-content {
-  flex: 1;
+  flex: 1 1 0;
   color: #EEE;
   background-color: #222;
   display: none;
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tab-content .ui-section:last-child {
+  flex: 1 1 0;
+  min-height: 0;       /* important for scroll containers */
+  display: flex;       /* keep column layout for its children */
+  flex-direction: column;
 }
 
 .tab-content.active {
@@ -68,6 +78,7 @@
 }
 
 .ui-section {
+  flex: 0 0 auto;
   background-color: #111;
   padding: 0.5rem;
   border: 1px solid #333;
@@ -120,10 +131,12 @@
 }
 
 .node-list {
+  flex: 1 1 auto;
   list-style-type: none;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  overflow-y: auto;
 }
 
 .node-item {
