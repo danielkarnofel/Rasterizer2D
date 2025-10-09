@@ -322,19 +322,21 @@ nodeZIndex.addEventListener("input", () => {
 });
 
 function updatePropertiesPanel(node) {
-	nodeFillColor.value = node ? rgbToHex(node.fill[0], node.fill[1], node.fill[2]) : '#ffffff';
+	nodeFillColor.value = node ? rgbToHex(node.fill[0], node.fill[1], node.fill[2]) : '#000000';
 	nodeFillOpacity.value = node ? node.fill[3] : 1.0;
 	nodeTextureSelect.value = (node && node.texture) ? node.texture.id : "";
 	nodeStrokeColor.value = node ? rgbToHex(node.stroke[0], node.stroke[1], node.stroke[2]) : '#000000';
 	nodeStrokeOpacity.value = node ? node.stroke[3] : 1.0;
-	nodeStrokeWidth.value = node ? node.strokeWidth : 1.0;
+	nodeStrokeWidth.value = node ? node.strokeWidth : 0.0;
 	nodeXPosition.value = node ? node.x : 0;
 	nodeYPosition.value = node ? node.y : 0;
-	nodeWScale.value = node ? node.w : 100;
-	nodeHScale.value = node ? node.h : 100;
+	nodeWScale.value = node ? node.w : 0;
+	nodeHScale.value = node ? node.h : 0;
 	nodeRotation.value = node ? node.r : 0;
 	nodeZIndex.value = node ? node.zIndex : 0;
 }
+
+updatePropertiesPanel();
 
 //===========================================================================================
 
