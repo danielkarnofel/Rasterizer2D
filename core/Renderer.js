@@ -70,11 +70,12 @@ const fragmentShaderSource = `#version 300 es
     void main() {
 
         vec4 base = u_useTexture ? texture(u_texture, v_tex) * u_fill : u_fill;
-        
-        if (u_strokeWidth <= 0.0) {
-            outColor = base;
-            return;
-        }
+
+        float strokeLocal = u_strokeWidth / u_pxPerLocal;
+
+        float aa = 1.0 / u_pxPerLocal;
+
+        vec4 color = base;
 
         float d;
         switch (u_geometry) {
@@ -83,12 +84,16 @@ const fragmentShaderSource = `#version 300 es
             case 2: d = sdfCircle(); break;
         }
 
-        if (abs(d) <= u_strokeWidth / u_pxPerLocal) {
-            outColor = u_stroke;
-            return;
+        if (u_strokeWidth > 0.0) {
+            float edge = abs(d) - strokeLocal;
+            float alpha = 1.0 - smoothstep(0.0, aa, edge);
+            color = mix(color, u_stroke, alpha);
         }
 
-        outColor = base;
+        float fillAlpha = 1.0 - smoothstep(0.0, aa, d);
+        color.a *= fillAlpha;
+
+        outColor = color;
     }
 `;
 
