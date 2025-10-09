@@ -4,7 +4,7 @@ import Scene from './core/Scene.js';
 import Node from './core/Node.js';
 import { rgbToHex, hexToRgb } from './utils/color.js';
 import { mouseToCanvas, pick } from './utils/pointer.js';
-import { createTestScene1, createTestScene2 } from './scenes/testScenes.js';
+import { robot, squares, flower } from './scenes/testScenes.js';
 
 const canvas = document.querySelector("#canvas");
 canvas.width = 600;
@@ -14,7 +14,7 @@ const renderer = new Renderer(canvas);
 
 // Create test scene
 //===========================================================================================
-let scene = createTestScene2();
+let scene = new Scene();
 renderer.updateAndRender(scene);
 //===========================================================================================
 
@@ -83,6 +83,23 @@ addNodeButton.addEventListener("click", () => {
 	scene.add([newNode]);
 	updateNodeList();
 	renderer.updateAndRender(scene);
+});
+
+// Clear
+const clearButton = document.querySelector("#clear");
+clearButton.addEventListener("click", () => {
+	scene = new Scene();
+	renderer.updateAndRender(scene);
+	updateNodeList();
+});
+
+// Export
+const exportButton = document.querySelector("#export");
+exportButton.addEventListener("click", () => {
+	const link = document.getElementById("download-link");
+	link.href = canvas.toDataURL();
+	link.download = "canvas.png";
+	link.click();
 });
 
 // Node selection
