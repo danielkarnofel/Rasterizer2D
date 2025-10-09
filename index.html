@@ -12,14 +12,12 @@
 <body>
     <header>
         <h1>Renderer2D</h1>
+        <span class="test-scenes">
+            <button class="test-scene-button" id="robot">Robot</button>
+            <button class="test-scene-button" id="flower">Flower</button>
+            <button class="test-scene-button" id="squares">Squares</button>
+        </span>
     </header>
-
-    <!-- <section class="test-scenes">
-        <p>Click here to generate a test scene:</p>
-        <button class="test-scene-button" id="robot">Robot</button>
-        <button class="test-scene-button" id="flower">Flower</button>
-        <button class="test-scene-button" id="squares">Squares</button>
-    </section> -->
 
     <main>
 
@@ -70,12 +68,12 @@
                     </span>
 
                     <span>
-                        <button id="clear">Clear Scene</button>
+                        <button id="export">Export PNG</button>
+                        <a id="download-link"></a>
                     </span>
 
                     <span>
-                        <button id="export">Export as PNG</button>
-                        <a id="download-link"></a>
+                        <button id="clear">Clear Scene</button>
                     </span>
                 </div>
 

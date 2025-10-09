@@ -18,6 +18,32 @@ let scene = new Scene();
 renderer.updateAndRender(scene);
 //===========================================================================================
 
+// Test scene buttons
+//===========================================================================================
+const robotButton = document.querySelector("#robot");
+robotButton.addEventListener("click", () => {
+	scene = robot();
+	renderer.updateAndRender(scene);
+	updateNodeList();
+	updateScenePanel();
+});
+
+const flowerButton = document.querySelector("#flower");
+flowerButton.addEventListener("click", () => {
+	scene = flower();
+	renderer.updateAndRender(scene);
+	updateNodeList();
+	updateScenePanel();
+});
+
+const squaresButton = document.querySelector("#squares");
+squaresButton.addEventListener("click", () => {
+	scene = squares();
+	renderer.updateAndRender(scene);
+	updateNodeList();
+	updateScenePanel();
+});
+
 // Tab functionality
 //===========================================================================================
 document.querySelectorAll(".tab-button").forEach(button => {
@@ -39,7 +65,6 @@ document.querySelectorAll(".tab-button").forEach(button => {
 
 // Canvas fill color
 const canvasFillInput = document.querySelector("#canvas-fill");
-canvasFillInput.value = rgbToHex(scene.clearColor[0], scene.clearColor[2], scene.clearColor[2])
 canvasFillInput.addEventListener("input", () => {
 	const hex = canvasFillInput.value;
 	const rgb = hexToRgb(hex);
@@ -49,7 +74,6 @@ canvasFillInput.addEventListener("input", () => {
 
 // Canvas opacity
 const canvasOpacityInput = document.querySelector("#canvas-opacity");
-canvasOpacityInput.value = scene.clearColor[3];
 canvasOpacityInput.addEventListener("input", () => {
 	const opacity = canvasOpacityInput.value;
 	scene.clearColor[3] = opacity;
@@ -91,6 +115,7 @@ clearButton.addEventListener("click", () => {
 	scene = new Scene();
 	renderer.updateAndRender(scene);
 	updateNodeList();
+	updateScenePanel();
 });
 
 // Export
@@ -101,6 +126,13 @@ exportButton.addEventListener("click", () => {
 	link.download = "canvas.png";
 	link.click();
 });
+
+function updateScenePanel() {
+	canvasFillInput.value = rgbToHex(scene.clearColor[0], scene.clearColor[2], scene.clearColor[2]);
+	canvasOpacityInput.value = scene.clearColor[3];
+	canvasWidthInput.value = canvas.width;
+	canvasHeightInput.value = canvas.height;
+}
 
 // Node selection
 let selectedNode = null;
@@ -336,8 +368,6 @@ function updatePropertiesPanel(node) {
 	nodeZIndex.value = node ? node.zIndex : 0;
 }
 
-updatePropertiesPanel();
-
 //===========================================================================================
 
 // Texture management
@@ -380,3 +410,4 @@ nodeTextureSelect.addEventListener('change', () => {
 	renderer.updateAndRender(scene);
 });
 
+updatePropertiesPanel();

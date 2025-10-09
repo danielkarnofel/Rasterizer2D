@@ -13,6 +13,8 @@ body {
 header {
     background-color: #222;
     padding: 1rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 main {
@@ -27,3 +29,10 @@ footer {
     background-color: #222;
     padding: 1rem;
 }
+
+.test-scenes {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+

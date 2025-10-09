@@ -1,3 +1,47 @@
+/* Test Scene Buttons */
+.test-scenes button {
+    padding: 0.25rem 0.5rem;
+    color: #EEE;
+    background-color: #333;
+    border: 1px solid #444;
+    border-color: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#robot {
+  background-color: #833;
+}
+
+#robot:hover {
+  background-color: #D33;
+  border-color: transparent;
+}
+
+#flower {
+  background-color: #338;
+}
+
+#flower:hover {
+  background-color: #33D;
+  border-color: transparent;
+}
+
+#squares {
+  background-color: #383;
+}
+
+#squares:hover {
+  background-color: #3B3;
+  border-color: transparent;
+}
+
+.test-scenes button:hover {
+    background-color: #555;
+    border-color: #666;
+}
+
 /* Canvas */
 
 .canvas-container {
@@ -121,6 +165,15 @@
 .ui-section button:hover {
   background-color: #555;
   border-color: #666;
+}
+
+#clear {
+  background-color: #933;
+}
+
+#clear:hover {
+  background-color: #D33;
+  border-color: transparent;
 }
 
 .ui-section select {

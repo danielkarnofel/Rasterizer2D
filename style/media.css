@@ -1,0 +1,19 @@
+
+@media (max-width: 600px) {
+    :root {
+        font-size: 14px;
+    }
+
+    input, select, button {
+        font-size: 0.75rem;
+    }
+
+    input[type="range"] {
+        width: 100px;
+    }
+
+    input[type="number"] {
+        width: 30px;
+    }
+    
+}
