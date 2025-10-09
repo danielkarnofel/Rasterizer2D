@@ -1,2 +1,2 @@
-# Rasterizer2D
-A 2D rasterizer built with JavaScript and WebGL2.
+# Renderer2D
+A 2D renderer built with JavaScript and WebGL2.
