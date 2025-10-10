@@ -387,13 +387,13 @@ function updateTextureList() {
 
 // Preloaded textures
 const dogTexture = {id: 1, img: new Image()};
-dogTexture.img.src = '/assets/dog.png';
+dogTexture.img.src = './assets/dog.png';
 dogTexture.img.onload = () => {
 	textureList[dogTexture.id] = dogTexture;
 	updateTextureList();
 }
 const catTexture = {id: 2, img: new Image()};
-catTexture.img.src = '/assets/cat.png';
+catTexture.img.src = './assets/cat.png';
 catTexture.img.onload = () => {
 	textureList[catTexture.id] = catTexture;
 	updateTextureList();
